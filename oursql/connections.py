@@ -47,13 +47,6 @@ class Connection(pymysql.connections.Connection):
                                   self.password, self.db, False, self.charset)
 
     def query(self, sql, args):
-        result = self._query(sql, args)
-        if isinstance(result, tuple):
-            return result[0]  # affected rows
-        else:
-            return result
-
-    def _query(self, sql, args):
         try:
             return self._umysql_conn.query(sql, args)
         except umysql.Error, exc:

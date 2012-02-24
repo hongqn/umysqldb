@@ -5,15 +5,15 @@ import unittest
 import oursql
 
 def setup_module():
+    @apply
     def print_sqls():
         print "patch"
         import oursql.connections
-        orig_query = oursql.connections.Connection._query
-        def _query(self, *a, **kw):
-            print a, kw
+        orig_query = oursql.connections.Connection.query
+        def query(self, *a, **kw):
+            print "QUERY:", a, kw
             return orig_query(self, *a, **kw)
-        oursql.connections.Connection._query = _query
-    print_sqls()
+        oursql.connections.Connection.query = query
 
 class test_oursql(dbapi20.DatabaseAPI20Test):
     driver = oursql
