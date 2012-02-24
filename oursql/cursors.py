@@ -3,7 +3,7 @@ import pymysql.cursors
 from .utils import setdocstring
 
 class Cursor(pymysql.cursors.Cursor):
-    @setdocstring(pymysql.cursors.Cursor)
+    @setdocstring(pymysql.cursors.Cursor.execute)
     def execute(self, query, args=None):
         if args is None:
             args = ()
@@ -14,5 +14,12 @@ class Cursor(pymysql.cursors.Cursor):
 
     def _query(self, query, args):
         conn = self._get_db()
-        return conn.query(query, args)
-
+        result = conn.query(query, args)
+        if isinstance(result, tuple):
+            self.rowcount = result[0]
+            self._rows = ()
+        else:
+            self.rowcount = len(result.rows)
+            self._rows = result.rows
+        self.rownumber = 0
+        return self.rowcount
