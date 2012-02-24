@@ -3,11 +3,12 @@ from pymysql import *
 from pymysql import DATETIME
 from pymysql import __all__
 
+from .utils import setdocstring
+
 __all__ += ['DATETIME']
 
+@setdocstring(pymysql.Connect)
 def Connect(*args, **kwargs):
-    pymysql.Connect.__doc__
-
     from .connections import Connection
     return Connection(*args, **kwargs)
 

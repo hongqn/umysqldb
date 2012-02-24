@@ -1,0 +1,2 @@
+from pymysql.err import *
+

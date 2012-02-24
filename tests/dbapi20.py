@@ -151,6 +151,7 @@ class DatabaseAPI20Test(unittest.TestCase):
                 *self.connect_args,**self.connect_kw_args
                 )
         except AttributeError:
+            import traceback; traceback.print_exc()
             self.fail("No connect method found in self.driver module")
 
     def test_connect(self):
@@ -721,7 +722,7 @@ class DatabaseAPI20Test(unittest.TestCase):
     def help_nextset_setUp(self,cur):
         ''' Should create a procedure called deleteme
             that returns two result sets, first the 
-	    number of rows in booze then "name from booze"
+            number of rows in booze then "name from booze"
         '''
         raise NotImplementedError('Helper not implemented')
         #sql="""
