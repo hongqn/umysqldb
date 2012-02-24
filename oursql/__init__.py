@@ -6,7 +6,7 @@ from pymysql import __all__
 __all__ += ['DATETIME']
 
 def Connect(*args, **kwargs):
-    pymysql.Connect.__docstring__
+    pymysql.Connect.__doc__
 
     from .connections import Connection
     return Connection(*args, **kwargs)
