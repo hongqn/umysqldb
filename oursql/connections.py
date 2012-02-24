@@ -42,6 +42,10 @@ class Connection(pymysql.connections.Connection):
     def commit(self):
         self.query('COMMIT')
 
+    @setdocstring(pymysql.connections.Connection.rollback)
+    def rollback(self):
+        self.query("ROLLBACK")
+
     @setdocstring(pymysql.connections.Connection.close)
     def close(self):
         if not self._umysql_conn.is_connected():
