@@ -12,7 +12,7 @@ from .err import (
 )
 
 def defaulterrorhandler(connection, cursor, errorclass, errorvalue):
-    pass
+    raise errorclass, errorvalue
 
 
 class Connection(pymysql.connections.Connection):

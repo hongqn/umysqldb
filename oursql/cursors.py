@@ -10,7 +10,10 @@ class Cursor(pymysql.cursors.Cursor):
         elif not isinstance(args, (tuple, list, dict)):
             args = (args,)
 
-        return self._query(query, args)
+        result = self._query(query, args)
+
+        self._executed = query
+        return result
 
     def _query(self, query, args):
         conn = self._get_db()
