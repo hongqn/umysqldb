@@ -1,8 +1,13 @@
-#import umysql
-from pymysql.connections import Connection as PyMySQLConnection
+import umysql
+import pymysql.connections
 
-class Connection(PyMySQLConnection):
+class Connection(object):
     def __init__(self, *args, **kwargs):
-        super(Connection, self).__init__(*args, **kwargs)
-#        self._conn = umysql.Connection(*args, **kwargs)
+        super(Connection, self).__init__()
+        self._pymysql_conn = pymysql.connections.Connection(*args, **kwargs)
 
+    def __getattr__(self, name):
+        return getattr(self._pymysql_conn, name)
+
+    def _connect(self):
+        pass
