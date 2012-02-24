@@ -2,6 +2,8 @@
 import dbapi20
 import unittest
 
+from nose.plugins.skip import SkipTest
+
 import oursql
 
 def setup_module():
@@ -178,6 +180,7 @@ class test_oursql(dbapi20.DatabaseAPI20Test):
         cur.execute("drop procedure deleteme")
 
     def test_nextset(self):
+        raise SkipTest  # umysql does not support calling procedure
         from warnings import warn
         con = self._connect()
         try:

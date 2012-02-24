@@ -15,7 +15,7 @@ class Cursor(pymysql.cursors.Cursor):
         self._executed = query
         return result
 
-    def _query(self, query, args):
+    def _query(self, query, args=()):
         conn = self._get_db()
         self._result = result = conn.query(query, args)
         if isinstance(result, tuple):
