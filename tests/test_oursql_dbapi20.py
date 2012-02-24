@@ -1,7 +1,19 @@
 #!/usr/bin/env python
 import dbapi20
 import unittest
+
 import oursql
+
+def setup_module():
+    def print_sqls():
+        print "patch"
+        import oursql.connections
+        orig_query = oursql.connections.Connection._query
+        def _query(self, *a, **kw):
+            print a, kw
+            return orig_query(self, *a, **kw)
+        oursql.connections.Connection._query = _query
+    print_sqls()
 
 class test_oursql(dbapi20.DatabaseAPI20Test):
     driver = oursql
