@@ -1,7 +1,9 @@
 import sys
+from datetime import timedelta
 
 import umysql
 import pymysql.connections
+from pymysql.constants import FIELD_TYPE
 
 from .utils import setdocstring
 from .cursors import Cursor
@@ -10,9 +12,21 @@ from .err import (
     map_runtime_error_to_oursql_exception,
     Error,
 )
+from .times import TimeDelta_or_None
+
+
+conversions = {
+    FIELD_TYPE.TIME: TimeDelta_or_None,
+}
 
 def defaulterrorhandler(connection, cursor, errorclass, errorvalue):
     raise errorclass, errorvalue
+
+
+class ResultSet(object):
+    def __init__(self, fields, rows):
+        self.fields = fields
+        self.rows = rows
 
 
 class Connection(pymysql.connections.Connection):
@@ -25,6 +39,8 @@ class Connection(pymysql.connections.Connection):
     def __init__(self, *args, **kwargs):
         if 'cursorclass' not in kwargs:
             kwargs['cursorclass'] = Cursor
+        if 'conv' not in kwargs:
+            kwargs['conv'] = conversions
         self._umysql_conn = umysql.Connection()
         super(Connection, self).__init__(*args, **kwargs)
 
@@ -58,7 +74,7 @@ class Connection(pymysql.connections.Connection):
 
     def query(self, sql, args=()):
         try:
-            return self._umysql_conn.query(sql, args)
+            result_set = self._umysql_conn.query(sql, args)
         except umysql.Error, exc:
             traceback = sys.exc_info()[2]
             exc = map_umysql_exception_to_oursql_exception(exc)
@@ -67,4 +83,16 @@ class Connection(pymysql.connections.Connection):
             traceback = sys.exc_info()[2]
             exc = map_runtime_error_to_oursql_exception(exc)
             raise exc, None, traceback
+        else:
+            if not isinstance(result_set, tuple):
+                result_set = self._convert_result_set(result_set)
+            return result_set
 
+    def _convert_result_set(self, result_set):
+        converters = [self.decoders.get(field[1]) for field in
+                      result_set.fields]
+        rows = [tuple(conv(data) if conv else data
+                      for data, conv in zip(row, converters))
+                for row in result_set.rows]
+        rs = ResultSet(result_set.fields, rows)
+        return rs
