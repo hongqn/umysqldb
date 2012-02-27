@@ -253,6 +253,7 @@ class DatabaseTest(unittest.TestCase):
                  generator)
 
     def test_LONG(self):
+        raise SkipTest("umysql treats BLOBs as bytes, not strings")
         def generator(row,col):
             if col == 0:
                 return row

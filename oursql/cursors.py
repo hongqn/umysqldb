@@ -24,7 +24,7 @@ class Cursor(pymysql.cursors.Cursor):
 
     def _query(self, query, args=()):
         conn = self._get_db()
-        self._result = result = conn.query(query, args)
+        self._umysql_result = result = conn.query(query, args)
         if isinstance(result, tuple):
             self.rowcount = result[0]
             self.description = None
