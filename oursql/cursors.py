@@ -15,6 +15,13 @@ class Cursor(pymysql.cursors.Cursor):
         self._executed = query
         return result
 
+    @setdocstring(pymysql.cursors.Cursor.executemany)
+    def executemany(self, query, args):
+        if not args:
+            return
+        self.rowcount = sum([self.execute(query, arg) for arg in args])
+        return self.rowcount
+
     def _query(self, query, args=()):
         conn = self._get_db()
         self._result = result = conn.query(query, args)

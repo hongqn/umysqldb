@@ -6,17 +6,6 @@ from nose.plugins.skip import SkipTest
 
 import oursql
 
-def setup_module():
-    @apply
-    def print_sqls():
-        print "patch"
-        import oursql.connections
-        orig_query = oursql.connections.Connection.query
-        def query(self, *a, **kw):
-            print "QUERY:", a, kw
-            return orig_query(self, *a, **kw)
-        oursql.connections.Connection.query = query
-
 class test_oursql(dbapi20.DatabaseAPI20Test):
     driver = oursql
     connect_args = ()
@@ -180,7 +169,7 @@ class test_oursql(dbapi20.DatabaseAPI20Test):
         cur.execute("drop procedure deleteme")
 
     def test_nextset(self):
-        raise SkipTest  # umysql does not support calling procedure
+        raise SkipTest("umysql does not support calling procedure")
         from warnings import warn
         con = self._connect()
         try:
