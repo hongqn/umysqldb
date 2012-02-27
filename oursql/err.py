@@ -9,6 +9,6 @@ def map_umysql_exception_to_oursql_exception(umysql_exc):
     return InternalError(*umysql_exc.args)
 
 def map_runtime_error_to_oursql_exception(exc):
-    if exc.message == 'Not connected':
+    if exc.args == ('Not connected',):
         return ProgrammingError("cursor closed")
     return exc
