@@ -44,6 +44,7 @@ class test_oursql(capabilities.DatabaseTest):
             generator)
         
     def test_stored_procedures(self):
+        raise SkipTest("umysql does not support procedures")
         db = self.connection
         c = self.cursor
         self.create_table(('pos INT', 'tree CHAR(20)'))
