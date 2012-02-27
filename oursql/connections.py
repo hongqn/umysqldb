@@ -12,11 +12,15 @@ from .err import (
     map_runtime_error_to_oursql_exception,
     Error,
 )
-from .times import TimeDelta_or_None
+from .times import (
+    TimeDelta_or_None,
+    mysql_timestamp_converter,
+)
 
 
 conversions = {
     FIELD_TYPE.TIME: TimeDelta_or_None,
+    FIELD_TYPE.TIMESTAMP: mysql_timestamp_converter,
 }
 
 def defaulterrorhandler(connection, cursor, errorclass, errorvalue):
