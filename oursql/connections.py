@@ -1,6 +1,7 @@
 import sys
 import time
 import datetime
+import socket
 
 import umysql
 import pymysql.connections
@@ -12,6 +13,7 @@ from .err import (
     map_umysql_exception_to_oursql_exception,
     map_runtime_error_to_oursql_exception,
     Error,
+    OperationalError,
 )
 from .times import (
     encode_struct_time,
@@ -93,8 +95,12 @@ class Connection(pymysql.connections.Connection):
 
 
     def _connect(self):
-        self._umysql_conn.connect(self.host, self.port, self.user,
-                                  self.password, self.db, False, self.charset)
+        try:
+            self._umysql_conn.connect(self.host, self.port, self.user,
+                                      self.password, self.db or '', False, self.charset)
+        except socket.error, e:
+            raise OperationalError(2003, "Can't connect to MySQL server on %r (%s)" % (
+                self.host, e.args[0]))
 
     # internal use only (called from cursor)
     def query(self, sql, args=()):

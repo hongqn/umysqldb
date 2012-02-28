@@ -244,20 +244,6 @@ class TestNewIssues(base.OurSQLTestCase):
         finally:
             c.execute("drop table issue38")
 
-    def disabled_test_issue_54(self):
-        conn = self.connections[0]
-        c = conn.cursor()
-        big_sql = "select * from issue54 where "
-        big_sql += " and ".join("%d=%d" % (i,i) for i in xrange(0, 100000))
-
-        try:
-            c.execute("create table issue54 (id integer primary key)")
-            c.execute("insert into issue54 (id) values (7)")
-            c.execute(big_sql)
-            self.assertEqual(7, c.fetchone()[0])
-        finally:
-            c.execute("drop table issue54")
-
 class TestGitHubIssues(base.OurSQLTestCase):
     def test_issue_66(self):
         conn = self.connections[0]
