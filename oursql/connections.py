@@ -5,7 +5,7 @@ import umysql
 import pymysql.connections
 from pymysql.constants import FIELD_TYPE
 
-from .utils import setdocstring
+from .util import setdocstring
 from .cursors import Cursor
 from .err import (
     map_umysql_exception_to_oursql_exception,

@@ -3,7 +3,7 @@ from pymysql import *
 from pymysql import DATETIME
 from pymysql import __all__
 
-from .utils import setdocstring
+from .util import setdocstring
 
 __all__ += ['DATETIME']
 

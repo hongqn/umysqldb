@@ -1,6 +1,6 @@
 import pymysql.cursors
 
-from .utils import setdocstring
+from .util import setdocstring
 
 class Cursor(pymysql.cursors.Cursor):
     @setdocstring(pymysql.cursors.Cursor.execute)
