@@ -203,7 +203,6 @@ class DatabaseTest(unittest.TestCase):
             generator)
 
     def test_DECIMAL(self):
-        raise SkipTest("umysql treats DECIMAL as string")
         # DECIMAL
         def generator(row,col):
             from decimal import Decimal
