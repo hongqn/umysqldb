@@ -4,6 +4,8 @@ import oursql
 _mysql = oursql
 from oursql.constants import FIELD_TYPE
 
+from nose.plugins.skip import SkipTest
+
 
 class TestDBAPISet(unittest.TestCase):
     def test_set_equality(self):
@@ -76,6 +78,7 @@ class CoreAPI(unittest.TestCase):
                         "Should return a string.")
 
     def test_proto_info(self):
+        raise SkipTest("umysql does not support retrieving protocol version")
         self.assertTrue(isinstance(self.conn.get_proto_info(), int),
                         "Should return an int.")
 
