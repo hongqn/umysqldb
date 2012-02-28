@@ -12,6 +12,8 @@ except AttributeError:
 
 import datetime
 
+from nose.plugins.skip import SkipTest
+
 # backwards compatibility:
 if not hasattr(unittest, "skip"):
     unittest.skip = lambda message: lambda f: f
@@ -199,6 +201,7 @@ class TestNewIssues(base.OurSQLTestCase):
             self.assertEqual(2013, e.args[0])
 
     def test_issue_36(self):
+        raise SkipTest("umysql does not support kill command")
         conn = self.connections[0]
         c = conn.cursor()
         # kill connections[0]
