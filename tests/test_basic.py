@@ -1,6 +1,8 @@
 import time
 import datetime
 
+from nose.plugins.skip import SkipTest
+
 from oursql import util
 from . import base
 
@@ -45,6 +47,7 @@ class TestConversion(base.OurSQLTestCase):
 
     def test_dict(self):
         """ test dict escaping """
+        raise SkipTest("umysql does not support dict escaping")
         conn = self.connections[0]
         c = conn.cursor()
         c.execute("create table test_dict (a integer, b integer, c integer)")
