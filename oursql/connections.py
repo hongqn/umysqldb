@@ -101,6 +101,10 @@ class Connection(pymysql.connections.Connection):
         except socket.error, e:
             raise OperationalError(2003, "Can't connect to MySQL server on %r (%s)" % (
                 self.host, e.args[0]))
+        except umysql.Error, exc:
+            traceback = sys.exc_info()[2]
+            exc = map_umysql_error_to_oursql_exception(exc)
+            raise exc, None, traceback
 
     # internal use only (called from cursor)
     def query(self, sql, args=()):
