@@ -28,18 +28,13 @@ class Cursor(pymysql.cursors.Cursor):
 
     def _query(self, query, args=()):
         conn = self._get_db()
-        self._umysql_result = result = conn.query(query, args)
-        if isinstance(result, tuple):
-            self.rowcount = result[0]
-            self.description = None
-            self._rows = ()
-        else:
-            self.rowcount = len(result.rows)
-            # fill field to 7-item tuple to meet DBAPI spec
-            self.description = tuple(f + (None,) * (7 - len(f))
-                                     for f in result.fields)
-            self._rows = result.rows
+        conn.query(query, args)
+        self.rowcount = conn._result.affected_rows
         self.rownumber = 0
+        self.description = conn._result.description
+        self.lastrowid = conn._result.insert_id
+        self._rows = conn._result.rows
+        self._has_next = 0
         return self.rowcount
 
 

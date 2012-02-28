@@ -42,8 +42,11 @@ def defaulterrorhandler(connection, cursor, errorclass, errorvalue):
 
 
 class ResultSet(object):
-    def __init__(self, fields, rows):
-        self.fields = fields
+    def __init__(self, affected_rows=None, insert_id=None, description=None,
+                 rows=None):
+        self.affected_rows = affected_rows
+        self.insert_id = insert_id
+        self.description = description
         self.rows = rows
 
 
@@ -107,9 +110,8 @@ class Connection(pymysql.connections.Connection):
             exc = map_runtime_error_to_oursql_exception(exc)
             raise exc, None, traceback
         else:
-            if not isinstance(result_set, tuple):
-                result_set = self._convert_result_set(result_set)
-            return result_set
+            self._result = self._convert_result_set(result_set)
+            return self._result.affected_rows
 
     def _convert_args(self, args):
         args = tuple(encoders.get(type(arg), notouch)(arg)
@@ -117,12 +119,18 @@ class Connection(pymysql.connections.Connection):
         return args
 
     def _convert_result_set(self, result_set):
-        converters = [self.decoders.get(field[1]) for field in
-                      result_set.fields]
-        rows = tuple(tuple(conv(data) if conv and data is not None else data
-                      for data, conv in zip(row, converters))
-                     for row in result_set.rows)
-        rs = ResultSet(result_set.fields, rows)
+        if isinstance(result_set, tuple):
+            rs = ResultSet(affected_rows=result_set[0],
+                           insert_id=result_set[1])
+        else:
+            converters = [self.decoders.get(field[1]) for field in
+                          result_set.fields]
+            rows = tuple(tuple(conv(data) if conv and data is not None else data
+                          for data, conv in zip(row, converters))
+                         for row in result_set.rows)
+            description = tuple(f + (None,) * (7 - len(f)) for f in result_set.fields)
+            rs = ResultSet(description=description, rows=rows,
+                           affected_rows=len(rows))
         return rs
 
     # _mysql support
