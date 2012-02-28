@@ -31,6 +31,7 @@ encoders = {
 decoders = {
     FIELD_TYPE.TIME: TimeDelta_or_None,
     FIELD_TYPE.TIMESTAMP: mysql_timestamp_converter,
+    FIELD_TYPE.NEWDECIMAL: float,
 }
 
 def notouch(x):
