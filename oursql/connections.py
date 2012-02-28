@@ -14,6 +14,7 @@ from .err import (
 )
 from .times import (
     TimeDelta_or_None,
+    DateTimeDelta2literal,
     mysql_timestamp_converter,
 )
 
@@ -77,6 +78,7 @@ class Connection(pymysql.connections.Connection):
                                   self.password, self.db, False, self.charset)
 
     def query(self, sql, args=()):
+        args = self._convert_args(args)
         try:
             result_set = self._umysql_conn.query(sql, args)
         except umysql.Error, exc:
@@ -91,6 +93,14 @@ class Connection(pymysql.connections.Connection):
             if not isinstance(result_set, tuple):
                 result_set = self._convert_result_set(result_set)
             return result_set
+
+    def _convert_args(self, args):
+        def _():
+            for arg in args:
+                if isinstance(arg, timedelta):
+                    arg = DateTimeDelta2literal(arg)
+                yield arg
+        return tuple(_())
 
     def _convert_result_set(self, result_set):
         converters = [self.decoders.get(field[1]) for field in

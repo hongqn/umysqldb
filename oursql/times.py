@@ -36,6 +36,11 @@ def TimeDelta_or_None(s):
         # unpacking or int/float conversion failed
         return None
 
+def DateTimeDelta2literal(delta):
+    seconds = int(delta.seconds) % 60
+    minutes = int(delta.seconds // 60) % 60
+    hours = int(delta.seconds // 3600) % 24 + int(delta.days) * 24
+    return "%02d:%02d:%02d" % (hours, minutes, seconds)
 
 def mysql_timestamp_converter(s):
     """Convert a MySQL TIMESTAMP to a Timestamp object."""
