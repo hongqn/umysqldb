@@ -73,8 +73,12 @@ class Connection(pymysql.connections.Connection):
             raise Error("Already closed")
         self._umysql_conn.close()
 
+    # _mysql support
     def get_proto_info(self):
         raise NotImplementedError("umysql has no proto info")
+
+    def get_server_info(self):
+        raise NotImplementedError("umysql has no server info")
 
     def _connect(self):
         self._umysql_conn.connect(self.host, self.port, self.user,

@@ -83,6 +83,7 @@ class CoreAPI(unittest.TestCase):
                         "Should return an int.")
 
     def test_server_info(self):
+        raise SkipTest("umysql does not support retrieving server version")
         self.assertTrue(isinstance(self.conn.get_server_info(), str),
                         "Should return an str.")
 
