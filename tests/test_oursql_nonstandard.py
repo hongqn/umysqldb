@@ -52,6 +52,7 @@ class CoreAPI(unittest.TestCase):
         self.conn.close()
 
     def test_thread_id(self):
+        raise SkipTest("umysql does not supporting retrieving thread id")
         tid = self.conn.thread_id()
         self.assertTrue(isinstance(tid, int),
                         "thread_id didn't return an int.")
