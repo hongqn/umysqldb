@@ -1,5 +1,6 @@
 import sys
-from datetime import timedelta
+import time
+import datetime
 
 import umysql
 import pymysql.connections
@@ -13,16 +14,25 @@ from .err import (
     Error,
 )
 from .times import (
+    encode_struct_time,
+    encode_timedelta,
     TimeDelta_or_None,
-    DateTimeDelta2literal,
     mysql_timestamp_converter,
 )
 
 
-conversions = {
+encoders = {
+    time.struct_time : encode_struct_time,
+    datetime.timedelta: encode_timedelta,
+}
+
+decoders = {
     FIELD_TYPE.TIME: TimeDelta_or_None,
     FIELD_TYPE.TIMESTAMP: mysql_timestamp_converter,
 }
+
+def notouch(x):
+    return x
 
 def defaulterrorhandler(connection, cursor, errorclass, errorvalue):
     raise errorclass, errorvalue
@@ -45,7 +55,7 @@ class Connection(pymysql.connections.Connection):
         if 'cursorclass' not in kwargs:
             kwargs['cursorclass'] = Cursor
         if 'conv' not in kwargs:
-            kwargs['conv'] = conversions
+            kwargs['conv'] = decoders
         self._umysql_conn = umysql.Connection()
         super(Connection, self).__init__(*args, **kwargs)
 
@@ -73,10 +83,12 @@ class Connection(pymysql.connections.Connection):
             raise Error("Already closed")
         self._umysql_conn.close()
 
+
     def _connect(self):
         self._umysql_conn.connect(self.host, self.port, self.user,
                                   self.password, self.db, False, self.charset)
 
+    # internal use only (called from cursor)
     def query(self, sql, args=()):
         args = self._convert_args(args)
         try:
@@ -95,12 +107,9 @@ class Connection(pymysql.connections.Connection):
             return result_set
 
     def _convert_args(self, args):
-        def _():
-            for arg in args:
-                if isinstance(arg, timedelta):
-                    arg = DateTimeDelta2literal(arg)
-                yield arg
-        return tuple(_())
+        args = tuple(encoders.get(type(arg), notouch)(arg)
+                     for arg in args)
+        return args
 
     def _convert_result_set(self, result_set):
         converters = [self.decoders.get(field[1]) for field in

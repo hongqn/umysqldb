@@ -1,7 +1,17 @@
+import time
 from datetime import datetime, date, timedelta
 import math
 
 Timestamp = datetime
+
+def encode_struct_time(obj):
+    return time.strftime("%Y-%m-%d %H:%M:%S", obj)
+
+def encode_timedelta(delta):
+    seconds = int(delta.seconds) % 60
+    minutes = int(delta.seconds // 60) % 60
+    hours = int(delta.seconds // 3600) % 24 + int(delta.days) * 24
+    return "%02d:%02d:%02d" % (hours, minutes, seconds)
 
 def Date_or_None(s):
     try: return date(*[ int(x) for x in s.split('-',2)])
@@ -35,12 +45,6 @@ def TimeDelta_or_None(s):
     except ValueError:
         # unpacking or int/float conversion failed
         return None
-
-def DateTimeDelta2literal(delta):
-    seconds = int(delta.seconds) % 60
-    minutes = int(delta.seconds // 60) % 60
-    hours = int(delta.seconds // 3600) % 24 + int(delta.days) * 24
-    return "%02d:%02d:%02d" % (hours, minutes, seconds)
 
 def mysql_timestamp_converter(s):
     """Convert a MySQL TIMESTAMP to a Timestamp object."""
