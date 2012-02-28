@@ -10,7 +10,7 @@ from pymysql.constants import FIELD_TYPE
 from .util import setdocstring
 from .cursors import Cursor
 from .err import (
-    map_umysql_exception_to_oursql_exception,
+    map_umysql_error_to_oursql_exception,
     map_runtime_error_to_oursql_exception,
     Error,
     OperationalError,
@@ -109,7 +109,7 @@ class Connection(pymysql.connections.Connection):
             result_set = self._umysql_conn.query(sql, args)
         except umysql.Error, exc:
             traceback = sys.exc_info()[2]
-            exc = map_umysql_exception_to_oursql_exception(exc)
+            exc = map_umysql_error_to_oursql_exception(exc)
             raise exc, None, traceback
         except RuntimeError, exc:
             traceback = sys.exc_info()[2]
