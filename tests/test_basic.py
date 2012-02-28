@@ -196,18 +196,6 @@ class TestCursor(base.OurSQLTestCase):
         finally:
             c.execute('drop table test_aggregates')
 
-    def test_single_tuple(self):
-        """ test a single tuple """
-        conn = self.connections[0]
-        c = conn.cursor()
-        try:
-            c.execute("create table mystuff (id integer primary key)")
-            c.execute("insert into mystuff (id) values (1)")
-            c.execute("insert into mystuff (id) values (2)")
-            c.execute("select id from mystuff where id in %s", ((1,),))
-            self.assertEqual([(1,)], list(c.fetchall()))
-        finally:
-            c.execute("drop table mystuff")
 
 __all__ = ["TestConversion","TestCursor"]
 
