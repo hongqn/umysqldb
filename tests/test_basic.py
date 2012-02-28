@@ -4,7 +4,7 @@ import datetime
 from oursql import util
 from . import base
 
-class TestConversion(base.PyMySQLTestCase):
+class TestConversion(base.OurSQLTestCase):
     def test_datatypes(self):
         """ test every data type """
         conn = self.connections[0]
@@ -113,7 +113,7 @@ class TestConversion(base.PyMySQLTestCase):
                          c.fetchone())
 
 
-class TestCursor(base.PyMySQLTestCase):
+class TestCursor(base.OurSQLTestCase):
     # this test case does not work quite right yet, however,
     # we substitute in None for the erroneous field which is
     # compatible with the DB-API 2.0 spec and has not broken

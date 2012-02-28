@@ -16,6 +16,7 @@ from .err import (
 from .times import (
     encode_struct_time,
     encode_timedelta,
+    encode_time,
     TimeDelta_or_None,
     mysql_timestamp_converter,
 )
@@ -24,6 +25,7 @@ from .times import (
 encoders = {
     time.struct_time : encode_struct_time,
     datetime.timedelta: encode_timedelta,
+    datetime.time: encode_time,
 }
 
 decoders = {
@@ -56,6 +58,8 @@ class Connection(pymysql.connections.Connection):
             kwargs['cursorclass'] = Cursor
         if 'conv' not in kwargs:
             kwargs['conv'] = decoders
+        if 'charset' not in kwargs:
+            kwargs['charset'] = 'utf8'
         self._umysql_conn = umysql.Connection()
         super(Connection, self).__init__(*args, **kwargs)
 
@@ -114,9 +118,9 @@ class Connection(pymysql.connections.Connection):
     def _convert_result_set(self, result_set):
         converters = [self.decoders.get(field[1]) for field in
                       result_set.fields]
-        rows = [tuple(conv(data) if conv else data
+        rows = tuple(tuple(conv(data) if conv and data is not None else data
                       for data, conv in zip(row, converters))
-                for row in result_set.rows]
+                     for row in result_set.rows)
         rs = ResultSet(result_set.fields, rows)
         return rs
 

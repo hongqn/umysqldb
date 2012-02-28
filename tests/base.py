@@ -1,7 +1,7 @@
 import oursql
 import unittest
 
-class PyMySQLTestCase(unittest.TestCase):
+class OurSQLTestCase(unittest.TestCase):
     # Edit this to suit your test environment.
     databases = [
         {"host":"127.0.0.1","user":"test",

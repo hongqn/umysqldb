@@ -13,6 +13,12 @@ def encode_timedelta(delta):
     hours = int(delta.seconds // 3600) % 24 + int(delta.days) * 24
     return "%02d:%02d:%02d" % (hours, minutes, seconds)
 
+def encode_time(obj):
+    s = "%02d:%02d:%02d" % (int(obj.hour), int(obj.minute), int(obj.second))
+    if obj.microsecond:
+        s += ".%f" % obj.microsecond
+    return s
+
 def Date_or_None(s):
     try: return date(*[ int(x) for x in s.split('-',2)])
     except: return None
