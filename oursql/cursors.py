@@ -2,10 +2,6 @@ import sys
 import pymysql.cursors
 
 from .util import setdocstring
-from .err import (
-    ProgrammingError,
-    NotSupportedError,
-)
 
 class Cursor(pymysql.cursors.Cursor):
     @setdocstring(pymysql.cursors.Cursor.execute)
