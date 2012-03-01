@@ -6,7 +6,7 @@ from pymysql import __all__
 
 from .util import setdocstring
 
-__versioin__ = '0.1'
+__version__ = '0.1'
 __all__ += ['DATETIME']
 
 @setdocstring(pymysql.Connect)
