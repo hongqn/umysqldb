@@ -23,6 +23,7 @@ def install_as_MySQLdb():
     _mysql will unwittingly actually use oursql.
     """
     sys.modules["MySQLdb"] = sys.modules["_mysql"] = sys.modules["oursql"]
+    sys.modules["MySQLdb.constants"] = sys.modules["pymysql.constants"]
 
 
 connect = Connection = Connect
