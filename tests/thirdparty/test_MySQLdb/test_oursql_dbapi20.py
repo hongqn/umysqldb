@@ -4,10 +4,10 @@ import unittest
 
 from nose.plugins.skip import SkipTest
 
-import oursql
+import umysqldb
 
-class test_oursql(dbapi20.DatabaseAPI20Test):
-    driver = oursql
+class test_umysqldb(dbapi20.DatabaseAPI20Test):
+    driver = umysqldb
     connect_args = ()
     connect_kw_args = dict(db='test',
                            host='127.0.0.1',

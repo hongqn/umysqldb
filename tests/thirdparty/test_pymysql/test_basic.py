@@ -4,13 +4,13 @@ import struct
 
 from nose.plugins.skip import SkipTest
 
-from oursql import util
+from umysqldb import util
 from . import base
 
 def int2byte(i):
     return struct.pack("!B", i)
 
-class TestConversion(base.OurSQLTestCase):
+class TestConversion(base.UMySQLdbTestCase):
     def test_datatypes(self):
         """ test every data type """
         conn = self.connections[0]
@@ -93,7 +93,7 @@ class TestConversion(base.OurSQLTestCase):
         c = conn.cursor()
         c.execute("create table test_big_blob (b blob)")
         try:
-            data = "oursql" * 1024
+            data = "umysqldb" * 1024
             c.execute("insert into test_big_blob (b) values (%s)", (data,))
             c.execute("select b from test_big_blob")
             self.assertEqual(data.encode(conn.charset), c.fetchone()[0])
@@ -120,7 +120,7 @@ class TestConversion(base.OurSQLTestCase):
                          c.fetchone())
 
 
-class TestCursor(base.OurSQLTestCase):
+class TestCursor(base.UMySQLdbTestCase):
     # this test case does not work quite right yet, however,
     # we substitute in None for the erroneous field which is
     # compatible with the DB-API 2.0 spec and has not broken
@@ -180,7 +180,7 @@ class TestCursor(base.OurSQLTestCase):
         c = conn.cursor()
         c.execute("create table test_nr (b varchar(32))")
         try:
-            data = "oursql"
+            data = "umysqldb"
             c.execute("insert into test_nr (b) values (%s)", (data,))
             self.assertEqual(None, c.fetchone())
         finally:

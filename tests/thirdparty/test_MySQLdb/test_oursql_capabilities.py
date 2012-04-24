@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 import capabilities
 import unittest
-import oursql
+import umysqldb
 import warnings
 
 from nose.plugins.skip import SkipTest
 
 warnings.filterwarnings('error')
 
-class test_oursql(capabilities.DatabaseTest):
+class test_umysqldb(capabilities.DatabaseTest):
 
-    db_module = oursql 
+    db_module = umysqldb 
     connect_args = ()
     connect_kwargs = dict(db='test',
                            host='127.0.0.1',
@@ -81,7 +81,7 @@ class test_oursql(capabilities.DatabaseTest):
             generator)
     
     def test_bug_2671682(self):
-        from oursql.constants import ER
+        from umysqldb.constants import ER
         try:
             self.cursor.execute("describe some_non_existent_table");
         except self.connection.ProgrammingError, msg:

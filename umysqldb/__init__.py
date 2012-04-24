@@ -20,9 +20,9 @@ def thread_safe():
 def install_as_MySQLdb():
     """
     After this function is called, any application that imports MySQLdb or
-    _mysql will unwittingly actually use oursql.
+    _mysql will unwittingly actually use umysqldb.
     """
-    sys.modules["MySQLdb"] = sys.modules["_mysql"] = sys.modules["oursql"]
+    sys.modules["MySQLdb"] = sys.modules["_mysql"] = sys.modules["umysqldb"]
     sys.modules["MySQLdb.constants"] = sys.modules["pymysql.constants"]
 
 

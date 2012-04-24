@@ -1,24 +1,24 @@
 import unittest
 
-import oursql
-_mysql = oursql
-from oursql.constants import FIELD_TYPE
+import umysqldb
+_mysql = umysqldb
+from umysqldb.constants import FIELD_TYPE
 
 from nose.plugins.skip import SkipTest
 
 
 class TestDBAPISet(unittest.TestCase):
     def test_set_equality(self):
-        self.assertTrue(oursql.STRING == oursql.STRING)
+        self.assertTrue(umysqldb.STRING == umysqldb.STRING)
 
     def test_set_inequality(self):
-        self.assertTrue(oursql.STRING != oursql.NUMBER)
+        self.assertTrue(umysqldb.STRING != umysqldb.NUMBER)
 
     def test_set_equality_membership(self):
-        self.assertTrue(FIELD_TYPE.VAR_STRING == oursql.STRING)
+        self.assertTrue(FIELD_TYPE.VAR_STRING == umysqldb.STRING)
 
     def test_set_inequality_membership(self):
-        self.assertTrue(FIELD_TYPE.DATE != oursql.STRING)
+        self.assertTrue(FIELD_TYPE.DATE != umysqldb.STRING)
 
 
 class CoreModule(unittest.TestCase):
@@ -67,7 +67,7 @@ class CoreAPI(unittest.TestCase):
 
     #def test_debug(self):
         ## FIXME Only actually tests if you lack SUPER
-        #self.assertRaises(oursql.OperationalError,
+        #self.assertRaises(umysqldb.OperationalError,
                           #self.conn.dump_debug_info)
 
     def test_charset_name(self):

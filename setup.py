@@ -1,6 +1,6 @@
 import os
 from setuptools import setup, find_packages
-from oursql import __version__
+from umysqldb import __version__
 
 install_requires = [
     'umysql',
@@ -8,7 +8,7 @@ install_requires = [
 ]
 
 setup(
-    name = 'oursql',
+    name = 'umysqldb',
     description = "MySQLdb compatible wrapper for ultramysql",
     long_description = open(os.path.join(os.path.dirname(__file__),
                                          'README.rst')).read(),

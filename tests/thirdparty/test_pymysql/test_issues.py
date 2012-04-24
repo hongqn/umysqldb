@@ -1,4 +1,4 @@
-import oursql
+import umysqldb
 from . import base
 import unittest
 
@@ -18,7 +18,7 @@ from nose.plugins.skip import SkipTest
 if not hasattr(unittest, "skip"):
     unittest.skip = lambda message: lambda f: f
 
-class TestOldIssues(base.OurSQLTestCase):
+class TestOldIssues(base.UMySQLdbTestCase):
     def test_issue_3(self):
         """ undefined methods datetime_or_None, date_or_None """
         conn = self.connections[0]
@@ -57,7 +57,7 @@ class TestOldIssues(base.OurSQLTestCase):
 
     def test_issue_6(self):
         """ exception: TypeError: ord() expected a character, but string of length 0 found """
-        conn = oursql.connect(host="localhost",user="root",passwd="",db="mysql")
+        conn = umysqldb.connect(host="localhost",user="root",passwd="",db="mysql")
         c = conn.cursor()
         c.execute("select * from user")
         conn.close()
@@ -80,7 +80,7 @@ KEY (`station`,`dh`,`echeance`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;""")
     def test_issue_9(self):
         """ sets DeprecationWarning in Python 2.6 """
         try:
-            reload(oursql)
+            reload(umysqldb)
         except DeprecationWarning:
             self.fail()
 
@@ -146,7 +146,7 @@ KEY (`station`,`dh`,`echeance`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;""")
             c.execute("grant all privileges on %s.issue17 to 'issue17user'@'%%' identified by '1234'" % db)
             conn.commit()
             
-            conn2 = oursql.connect(host=host, user="issue17user", passwd="1234", db=db)
+            conn2 = umysqldb.connect(host=host, user="issue17user", passwd="1234", db=db)
             c2 = conn2.cursor()
             c2.execute("select x from issue17")
             self.assertEqual("hello, world!", c2.fetchone()[0])
@@ -160,18 +160,18 @@ def _uni(s, e):
     else:
         return unicode(s, e)
 
-class TestNewIssues(base.OurSQLTestCase):
+class TestNewIssues(base.UMySQLdbTestCase):
     def test_issue_34(self):
         try:
-            oursql.connect(host="localhost", port=1237, user="root")
+            umysqldb.connect(host="localhost", port=1237, user="root")
             self.fail()
-        except oursql.OperationalError, e:
+        except umysqldb.OperationalError, e:
             self.assertEqual(2003, e.args[0])
         except:
             self.fail()
 
     def test_issue_33(self):
-        conn = oursql.connect(host="localhost", user="root", db=self.databases[0]["db"], charset="utf8")
+        conn = umysqldb.connect(host="localhost", user="root", db=self.databases[0]["db"], charset="utf8")
         c = conn.cursor()
         try:
             c.execute(_uni("create table hei\xc3\x9fe (name varchar(32))", "utf8"))
@@ -189,7 +189,7 @@ class TestNewIssues(base.OurSQLTestCase):
         try:
             c.execute("select sleep(10)")
             self.fail()
-        except oursql.OperationalError, e:
+        except umysqldb.OperationalError, e:
             self.assertEqual(2013, e.args[0])
 
     def test_issue_36(self):
@@ -239,7 +239,7 @@ class TestNewIssues(base.OurSQLTestCase):
         finally:
             c.execute("drop table issue38")
 
-class TestGitHubIssues(base.OurSQLTestCase):
+class TestGitHubIssues(base.UMySQLdbTestCase):
     def test_issue_66(self):
         conn = self.connections[0]
         c = conn.cursor()

@@ -1,11 +1,11 @@
 from . import base
-import oursql.cursors
+import umysqldb.cursors
 
 from nose.plugins.skip import SkipTest
 
 raise SkipTest("umysql does not support server-side cursor")
 
-class TestSSCursor(base.OurSQLTestCase):
+class TestSSCursor(base.UMySQLdbTestCase):
 
     def test_SSCursor(self):
         affected_rows = 18446744073709551615
@@ -24,7 +24,7 @@ class TestSSCursor(base.OurSQLTestCase):
             ('America', '', 'America/Detroit'),]
     
         try:
-            cursor = conn.cursor(oursql.cursors.SSCursor)
+            cursor = conn.cursor(umysqldb.cursors.SSCursor)
         
             # Create table
             cursor.execute(('CREATE TABLE tz_data ('

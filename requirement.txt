@@ -1,0 +1,10 @@
+MySQL-python==1.2.3
+-e git+https://github.com/petehunt/PyMySQL.git@3656421dae1dfff4a431b2eb0e1d2b805e10b6ea#egg=PyMySQL-dev
+distribute==0.6.19
+gevent==0.13.6
+greenlet==0.3.4
+mysql-ctypes==0.5
+nose==1.1.3.dev
+-e git+git@github.com:hongqn/ultramysql.git@f5c5839a4f02473fbeaaa882771230d2e1fb9c35#egg=umysql-dev
+-e git+http://code.dapps.douban.com/oursql.git@c3fc693d4b65b736615d5b74656a12f9cd70c014#egg=umysqldb-dev
+wsgiref==0.1.2

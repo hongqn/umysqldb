@@ -1,14 +1,14 @@
 import datetime
-import oursql.cursors
+import umysqldb.cursors
 from . import base
 
 
-class TestDictCursor(base.OurSQLTestCase):
+class TestDictCursor(base.UMySQLdbTestCase):
 
     def test_DictCursor(self):
         #all assert test compare to the structure as would come out from MySQLdb 
         conn = self.connections[0]
-        c = conn.cursor(oursql.cursors.DictCursor)
+        c = conn.cursor(umysqldb.cursors.DictCursor)
         # create a table ane some data to query
         c.execute("""CREATE TABLE dictcursor (name char(20), age int , DOB datetime)""")
         data = (("bob",21,"1990-02-06 23:04:56"),

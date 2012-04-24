@@ -1,6 +1,6 @@
 from pymysql.err import *
 
-def map_umysql_error_to_oursql_exception(umysql_exc):
+def map_umysql_error_to_umysqldb_exception(umysql_exc):
     errorclass = error_map.get(umysql_exc.args[0])
     if errorclass:
         return errorclass(*umysql_exc.args)
@@ -12,7 +12,7 @@ def map_umysql_error_to_oursql_exception(umysql_exc):
 
     return InternalError(*umysql_exc.args)
 
-def map_runtime_error_to_oursql_exception(exc):
+def map_runtime_error_to_umysqldb_exception(exc):
     if exc.args == ('Not connected',):
         return ProgrammingError("cursor closed")
     return exc
