@@ -1,6 +1,6 @@
-======
-OurSQL
-======
+========
+umysqldb
+========
 
 A MySQLdb compatible wrapper around ultramysql_.
 
@@ -11,5 +11,5 @@ Usage
 
 ::
 
-  import oursql
-  oursql.install_as_MySQLdb()
+  import umysqldb
+  umysqldb.install_as_MySQLdb()
