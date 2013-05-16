@@ -153,3 +153,6 @@ class Connection(pymysql.connections.Connection):
     def thread_id(self):
         raise NotImplementedError("umysql has no thread info")
 
+    def ping(self, reconnect=True):
+        raise NotImplementedError("umysql has no ping support")
+
