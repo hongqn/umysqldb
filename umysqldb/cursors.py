@@ -11,6 +11,11 @@ INSERT_VALUES = re.compile(
     r"(?P<end>.*)",
     re.I)
 
+def _flatten(alist):
+    result = []
+    map(result.extend, alist)
+    return tuple(result)
+
 class Cursor(pymysql.cursors.Cursor):
     @setdocstring(pymysql.cursors.Cursor.execute)
     def execute(self, query, args=None):
@@ -49,21 +54,9 @@ class Cursor(pymysql.cursors.Cursor):
         values = matched.group('values')
         end = matched.group('end')
 
-        result = 0
-        try:
-            sql_params = (values % tuple((conn.escape(col)
-                                          for col in conn._convert_args(row)))
-                          for row in args)
-            multirow_query = '\n'.join([start, ','.join(sql_params), end])
-            result = self._query(multirow_query)
-            self._executed = multirow_query
-        except:
-            exc, value, tb = sys.exc_info()
-            del tb
-            self.errorhandler(self, exc, value)
-
-        return result
-        
+        sql_params = (values for i in range(len(args)))
+        multirow_query = '\n'.join([start, ','.join(sql_params), end])
+        return self.execute(multirow_query, _flatten(args))
 
     def _query(self, query, args=()):
         conn = self._get_db()
