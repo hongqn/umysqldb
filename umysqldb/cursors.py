@@ -1,7 +1,20 @@
 import sys
+import re
 import pymysql.cursors
 
 from .util import setdocstring
+
+#Thank you MySQLdb for the kind regex
+INSERT_VALUES = re.compile(
+    r"(?P<start>.+values\s*)"
+    r"(?P<values>\(((?<!\\)'[^\)]*?\)[^\)]*(?<!\\)?'|[^\(\)]|(?:\([^\)]*\)))+\))"
+    r"(?P<end>.*)",
+    re.I)
+
+def _flatten(alist):
+    result = []
+    map(result.extend, alist)
+    return tuple(result)
 
 class Cursor(pymysql.cursors.Cursor):
     @setdocstring(pymysql.cursors.Cursor.execute)
@@ -26,8 +39,24 @@ class Cursor(pymysql.cursors.Cursor):
     def executemany(self, query, args):
         if not args:
             return
-        self.rowcount = sum([self.execute(query, arg) for arg in args])
-        return self.rowcount
+        conn = self._get_db()
+        charset = conn.charset
+        if isinstance(query, unicode):
+            query = query.encode(charset)
+        
+        matched = INSERT_VALUES.match(query)
+        if not matched:
+            self.rowcount = sum([self.execute(query, arg) for arg in args])
+            return self.rowcount
+
+        #Speed up a bulk insert MySQLdb style
+        start = matched.group('start')
+        values = matched.group('values')
+        end = matched.group('end')
+
+        sql_params = (values for i in range(len(args)))
+        multirow_query = '\n'.join([start, ','.join(sql_params), end])
+        return self.execute(multirow_query, _flatten(args))
 
     def _query(self, query, args=()):
         conn = self._get_db()
