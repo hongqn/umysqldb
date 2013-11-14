@@ -11,5 +11,15 @@ Usage
 
 ::
 
-  import umysqldb
-  umysqldb.install_as_MySQLdb()
+  >>> import umysqldb
+  >>> umysqldb.install_as_MySQLdb()
+  >>> import MySQLdb
+  >>> MySQLdb is umysqldb
+  True
+  >>> conn = MySQLdb.connect(host='localhost')
+  >>> curs = conn.cursor()
+  >>> curs.execute("select 1")
+  1
+  >>> curs.fetchone()
+  (1L,)
+  >>> conn.close()

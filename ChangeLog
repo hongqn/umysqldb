@@ -1,5 +1,8 @@
-1.0.3 (unreleased)
-	* bugfix: Specify require pymysql<0.6.  Thank LeeXiaolan.
+2013-11-14 1.0.3
+	* doc: Add example usage in README.
+	* new: Support ping. (Pull #2, Thank V-E-O)
+	* enhance: Speed up executemany for insert.  (Pull #4, Thank fried)
+	* bugfix: Specify require pymysql<0.6.  (Pull #3, Thank LeeXiaolan)
 
 2013-05-16 1.0.2
 	* bugfix: Oops. Forgot to include commits
