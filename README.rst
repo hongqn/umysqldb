@@ -23,3 +23,8 @@ Usage
   >>> curs.fetchone()
   (1L,)
   >>> conn.close()
+
+
+.. image:: https://travis-ci.org/hongqn/umysqldb.png?branch=master,develop
+   :alt: Build Status
+   :target: https://travis-ci.org/hongqn/umysqldb
