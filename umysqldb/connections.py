@@ -153,6 +153,18 @@ class Connection(pymysql.connections.Connection):
     def thread_id(self):
         raise NotImplementedError("umysql has no thread info")
 
-    def ping(self, reconnect=True):
-        raise NotImplementedError("umysql has no ping support")
-
+    def ping(self, reconnect=False):
+        flag = False
+        if self._umysql_conn.is_connected():
+            try:
+                self._umysql_conn.query("select 1;")
+            except:
+                self._umysql_conn.close()
+                flag = True
+        else:
+            flag = True
+        if flag:
+            if reconnect:
+                self._connect()
+            else:
+                raise OperationalError(2006, 'MySQL server has gone away')
