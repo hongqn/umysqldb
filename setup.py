@@ -11,7 +11,7 @@ setup(
     description = "MySQLdb compatible wrapper for ultramysql",
     long_description = open(os.path.join(os.path.dirname(__file__),
                                          'README.rst')).read(),
-    version = '1.0.3',
+    version = '1.0.4dev',
     packages = find_packages(exclude=['examples', 'tests']),
     install_requires = install_requires,
     author = "Qiangning Hong",
