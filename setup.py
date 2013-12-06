@@ -26,5 +26,5 @@ setup(
                  "Topic :: Software Development :: Libraries :: Python Modules",
                 ],
     test_suite = 'nose.collector',
-    tests_require = ['nose'],
+    tests_require = ['nose', 'mock'],
 )
