@@ -1,4 +1,3 @@
-import sys
 import re
 import pymysql.cursors
 from .util import setdocstring
@@ -48,13 +47,7 @@ class Cursor(pymysql.cursors.Cursor):
             args = (args,)
 
         result = 0
-        try:
-            result = self._query(query, args)
-        except:
-            exc, value, tb = sys.exc_info()
-            del tb
-            self.errorhandler(self, exc, value)
-
+        result = self._query(query, args)
         self._executed = query
         return result
 
