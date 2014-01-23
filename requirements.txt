@@ -1,4 +1,4 @@
-PyMySQL==0.5
+PyMySQL==0.6.1
 gevent==1.0
 greenlet==0.4.1
 mock==1.0.1
