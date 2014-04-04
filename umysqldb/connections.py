@@ -4,6 +4,7 @@ import datetime
 import socket
 
 import umysql
+from decimal import Decimal
 import pymysql.connections
 from pymysql.constants import FIELD_TYPE
 
@@ -31,7 +32,7 @@ encoders = {
 
 decoders = {
     FIELD_TYPE.TIME: TimeDelta_or_None,
-    FIELD_TYPE.NEWDECIMAL: float,
+    FIELD_TYPE.NEWDECIMAL: Decimal,
 }
 
 
