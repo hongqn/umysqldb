@@ -32,6 +32,14 @@ class test_umysqldb(capabilities.DatabaseTest):
                  ('col1 TIME',),
                  generator)
 
+    def test_DECIMAL(self):
+        from decimal import Decimal
+        def generator(row,col):
+            return Decimal("3.14")
+        self.check_data_integrity(
+                 ('col1 DECIMAL(3, 2)',),
+                 generator)
+
     def test_TINYINT(self):
         # Number data
         def generator(row,col):
